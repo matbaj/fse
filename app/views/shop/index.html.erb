@@ -1,0 +1,23 @@
+<div id="categories">
+<div id="arrowc_box">
+<div id="arrowc"><img src="/arrow.png"></div>
+<div id="arrowc_content">Kategorie</div>
+</div>
+
+<% @categories.each do |category| %>
+	<a href="/category/<%=category.id%>"><span class="button"><%= category.name %><span></a>
+
+<% end %></div>
+<div id="content">
+<div class="content_title">Produkty</div>
+<% @things.each do |thing| %>
+	<div class="offer_box">
+	<b><%= thing.name %></b><br><br>
+	<span class="price"><%= thing.cost %> zł</span><br><a href="/thing/<%= thing.id %>"><input  class="button" type="button" value='Wybierz'></a>
+	</div>
+<% end %>
+<div id="arrowp_box">
+<div id="arrow"><img src="/arrow2.png"></div>
+<div id="arrowp_content">Pole z produktami (można klikać ^ ^)</div>
+</div>
+</div>

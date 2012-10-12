@@ -1,14 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Fse</title>
+  <title>Fse </title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+   <meta name="Robots" content="all" /> 
+    <meta name="description" content="" /> 
+    <meta name="keywords" content="" /> 
+    <meta name="Language" content="pl-PL" /> 
+    <meta name="Author" content="greyfox" /> 
 </head>
 <body>
 
-<%= yield %>
-
+    <div id="logo">
+	<a href="/">FSE</a> (fajny sklep elektroniczny)
+	<div id="arrowl_box">
+	    <div id="arrowl"><img src="/arrow3.png"></div>
+	    <div id="arrowl_content">Idz do indeks!</div>
+	</div>
+    </div>
+    <div id="frame">
+	
+	    <%= yield %>
+    </div>
+    <div id="finn">
+	<div id="cloud">Przygoda trwa!<div id="cloud_triangle_l"></div></div>
+    <img src="http://images1.wikia.nocookie.net/__cb20120921151660/adventuretimewithfinnandjake/images/f/f3/Original_Finn.png">
+    </div>
 </body>
 </html>
