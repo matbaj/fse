@@ -56,10 +56,22 @@ Fse::Application.routes.draw do
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  resources :admin
+ namespace "admin"  do
+    match 'categories/:action(/:id)', :controller => 'categories'
+    
+    
+  end
   root :to => "shop#index"
+  match 'admin/' => "admin#index"
+  match 'admin/:action(/:id)', :controller => 'admin'
+#  match 'admin/category' => "admin#category"
+#  match 'admin/category_add/' => "admin#category_add"
+#  match 'admin/category_edit/:id' => "admin#category_edit"
+#  match 'admin/category_del/:id' => "admin#category_del"
   match 'category/' => "shop#category_list"
+  match 'cart_item_add(.:format)' => "shop#cart_item_add"
   match 'category/:id' => "shop#category"
   match 'thing/:id' => "shop#thing"
+  match ':action(/:id)', :controller => 'shop'
   # match ':controller(/:action(/:id))(.:format)'
 end

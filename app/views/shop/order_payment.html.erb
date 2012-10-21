@@ -1,0 +1,11 @@
+<div id="content">
+<div class="content_title">Płatnosc</div>
+<h2>Dane kontaktowe</h2>
+<p>Imie: <%= session[:buyer].first_name %></p>
+<p>Nazwisko: <%= session[:buyer].last_name %></p>
+<h2>Suma zakupów: <%= @total %></h2>
+<a href="/order_confirm">Zapłac i potwierdz zamówienie</a><br>
+(UWAGA! ... Tutaj powinna byc platnosc np paypal lecz to jest test wiec po kliknieciu automagicznie zamowienie jest zaplacone)
+
+
+</div>

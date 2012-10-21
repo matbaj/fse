@@ -1,0 +1,30 @@
+<div id="content">
+<div class="content_title">Sczególy zamówienia <%= @order.buyer.first_name %> <%= @order.buyer.last_name %>@<%= @order.updated_at %></div>
+<script type="text/javascript">
+	var sum = 0;
+</script>
+<table>
+	<th>Nazwa</th>
+	<th>Sztuk</th>
+	<th>cena</th>
+	<th>suma </th>
+<% @order.order_items.each do |order_item| %>
+<tr>
+	<td><%= order_item.thing %></td>
+	<td><%= order_item.count %></td>
+	<td><%=order_item.cost%></td>
+	<td><%= order_item.count * order_item.cost%></td>
+<script type="text/javascript">
+	var sum = sum+<%= order_item.count * order_item.cost%>;
+</script>
+<% end %>
+
+</table>
+<script type="text/javascript">
+$(document).ready(function() {
+		$("#sum_content").html(sum);
+});
+</script>
+<h2>SUMA: <span id="sum_content"></span> PLN</h2>
+
+</div>

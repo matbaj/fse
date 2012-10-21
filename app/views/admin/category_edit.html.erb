@@ -1,0 +1,11 @@
+<div id="content">
+<div class="content_title">Edytujesz Kategorie <%=@category.name %></div>
+
+<%= form_for(@category, :url => { :action => "category_edit" }) do |f| %>
+<p>Tytuł: <%= f.text_field :name%></p>
+<%= f.submit %>
+<% end %>
+
+
+
+</div>

@@ -1,0 +1,38 @@
+<div id="content">
+<div class="content_title">Podsumowanie zamówienia</div>
+
+<script type="text/javascript">
+var sum = 0;
+
+</script>
+
+<% session[:buyer].cart.cart_items.each do |cart_item| %>
+      <div class="cart_object" >
+        <div class="price"><%= cart_item.thing.cost %> PLN</div>
+        <script type="text/javascript">
+		var sum = sum+<%= cart_item.thing.cost %>;
+
+		</script>
+        <div class="title"><%= cart_item.thing.name %></div>
+        <div class="price_sum">4PLN</div>
+        <div class="count">Sztuk:<input type="text" size="2" value="<%= cart_item.count%>"></div>
+        <div class="info_button">Szczegóły</div>
+        <div class="remove_button">Usuń</div>
+        <br>
+
+    </div>
+
+<% end %>
+<script type="text/javascript">
+$(document).ready(function() {
+		$("#sum_content").html(sum);
+});
+</script>
+<h2>SUMA: <span id="sum_content"></span> PLN</h2>
+<%= form_for(session[:buyer], :url => { :action => "order_payment" }) do |f| %>
+<p>Imie: <%= f.text_field :first_name%></p>
+<p>Nazwisko: <%= f.text_field :last_name%></p>
+
+<%= f.submit 'Zakończ i przejdz do płatnosci' %>
+<% end %>
+</div>

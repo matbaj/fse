@@ -56,53 +56,13 @@
 <div id="arrowc"><img src="/arrow.png"></div>
 <div id="arrowc_content">Kategorie</div>
 </div > -->
-<a href="/"><span class="button">Pulpit<span></a>
+<a href="/admin/"><span class="button">Pulpit<span></a>
 <a href="/admin/category/"><span class="button">Kategorie<span></a>
-<a href="#"><span class="button">Produkty<span></a>
-<a href="#"><span class="button">Historia zamówień<span></a>
-<a href="#"><span class="button">Użytkownicy<span></a> 
+<a href="/admin/things"><span class="button">Produkty<span></a>
+<a href="/admin/order_history"><span class="button">Historia zamówień<span></a>
+<a href="/admin/users"><span class="button">Użytkownicy<span></a> 
 </div>
-<div id="cart_outside">
-<div id="cart">
-  <a id="cart_icon" onclick="cart_click()"><img src="/assets/cart.png"><br>Koszyk<br>(2)</a>
-  <div id="cart_content">
-    <div id="cart_title">Twój koszyk</div>
 
-    <div id="cart_objects">
-      <div class="cart_object" id="cart_new_object">
-          <div class="add_here"><img src="/assets/go-jump.png"></div>
-          <div class="cart_finn"><div id="cart_cloud">Ziomuś! rzuć tutaj<br>Zaufaj mi!<div id="cart_cloud_triangle_l"></div></div></div>
-
-    </div>
-      <div class="cart_object">
-        <div class="price">2PLN</div>
-        <div class="title">Rzecz</div>
-        <div class="price_sum">4PLN</div>
-        <div class="count">Sztuk:<input type="text" size="2" value="2"></div>
-        <div class="info_button">Szczegóły</div>
-        <div class="remove_button">Usuń</div>
-        <br>
-
-    </div>
-      <div class="cart_object">
-        <div class="price">20PLN</div>
-        <div class="title">Rzecz 2</div>
-
-        <div class="price_sum">4PLN</div>
-        <div class="count">Sztuk:<input type="text" size="2" value="2"></div>
-        <div class="remove_button">Usuń</div>
-        <br>
-
-    </div>
-    <div id="cart_summary">Suma: 200 zł</div>
-      <div id="cart_end_button">Zakończ zakupy</div>
-  </div>
-
-
-
-  </div>
-</div>
-</div>
     <div id="frame">
 	    <%= yield %>
     </div>

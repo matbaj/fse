@@ -38,6 +38,7 @@ padding:20px;
 border:1px solid #eeeeec;
 border-radius: 5px;
 min-height:300px;
+width:760px;
 }
 #logo {
 position:absolute;
@@ -435,9 +436,9 @@ border-radius: 5px;
 border-bottom:1px solid #555753 ;
 position:absolute;
 left:50%;
-top:130px;
+top:115px;
 margin-left:-400px;
-width:800px;
+width:780px;
 
 color:#fff;
 padding-right:10px;

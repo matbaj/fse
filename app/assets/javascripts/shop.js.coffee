@@ -24,17 +24,22 @@ cart_new_hidden= 1
 		$('#cart_new_object').hide( )
 		cart_new_hidden=1
 
+@cart_add_new = (id) ->
+	$.post(
+		'/cart_item_add.js'
+	 	thing_id: id 
+		'json'
+	)
 
 
-# To jest funkcja toggle i ma powtórzoną funkcje sprawdzajaca, żeby ominąć bugi 
-# Omija bugi ale strzela w stope optymalizacji
+# This is toggle. It's checking if cart is hidden twice. It's not a bug it's a feature
 @cart_click = () ->
 	if cart_hidden
 		cart_show()
 	else
 		cart_hide()
 
-$(document).ready ->
+$ ->
 	$('.offer_box').draggable({
 	    helper: "clone",
 	    revert: "invalid",
@@ -50,5 +55,5 @@ $(document).ready ->
 	    })
 	$("#cart_new_object").droppable({
 		drop: (event, ui) ->
-			alert(ui.draggable.text())
+			cart_add_new(ui.draggable[0].id.split("_")[1])
 	})

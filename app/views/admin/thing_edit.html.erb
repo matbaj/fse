@@ -1,0 +1,14 @@
+<div id="content">
+<div class="content_title">Edytujesz produkt <%= @thing.name %></div>
+
+<%= form_for(@thing, :url => { :action => "thing_edit" }) do |f| %>
+<p>Tytuł: <%= f.text_field :name%></p>
+<p>Opis: <%= f.text_field :about%></p>
+<p>Cena: <%= f.text_field :cost%></p>
+<p>Kategoria: <%=  select("thing", "category_id", Category.all.collect {|p| [ p.name, p.id ] }, {:include_blank => 'None'})  %></p>
+<%= f.submit %>
+<% end %>
+
+
+
+</div>

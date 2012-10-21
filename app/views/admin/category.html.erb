@@ -1,0 +1,8 @@
+<div id="content">
+<div class="content_title">Kategorie</div>
+<a href="/admin/category_add">Utwórz Kategorie</a><br><br>
+<% @categories.each do |category| %>
+	<a href="/admin/category_edit/<%=category.id%>"><span class="button"><%= category.name %><span></a> (Ilość produktów w kategorii <%= category.things.count %>) <a href="/admin/category_del/<%=category.id%>">Usuń (DANGEROUS!)</a><br><br>
+
+<% end %>
+</div>
