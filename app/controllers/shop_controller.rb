@@ -10,7 +10,9 @@ class ShopController < ApplicationController
 	    @categories = Category.all
 	    @category = Category.find(params[:id])
 	end
-
+	def category_list
+	    @categories = Category.all
+	end
 	def thing
 	    @categories = Category.all
 	    @thing = Thing.find(params[:id])

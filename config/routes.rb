@@ -1,4 +1,6 @@
 Fse::Application.routes.draw do
+  devise_for :users
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -54,7 +56,9 @@ Fse::Application.routes.draw do
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
+  resources :admin
   root :to => "shop#index"
+  match 'category/' => "shop#category_list"
   match 'category/:id' => "shop#category"
   match 'thing/:id' => "shop#thing"
   # match ':controller(/:action(/:id))(.:format)'

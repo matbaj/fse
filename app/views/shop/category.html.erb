@@ -1,27 +1,16 @@
-<div id="categories">
-<div id="arrowc_box">
-<div id="arrowc"><img src="/arrow.png"></div>
-<div id="arrowc_content">Kategorie</div>
-</div>
-<% @categories.each do |category| %>
-	<a href="/category/<%=category.id%>"><span class="button"><%= category.name %><span></a>
 
-<% end %></div>
 <div id="content">
 <div class="content_title">Produkty @ <%=@category.name%></div>
 
 <% @category.things.each do |thing| %>
-	<div class="offer_box">
-	<b><%= thing.name %></b><br><br>
-	<span class="price"><%= thing.cost %> zł</span><br><a href="/thing/<%= thing.id %>"><input  class="button" type="button" value='Wybierz'></a>
-	</div>
+<%= render :partial => "offer_box",  :locals => { :thing => thing }  %>
 <% end %>
 <div id="finn_win">
 <div id="cloud">Tyle artykułów...<br>Tyle wygrać<div id="cloud_triangle_l"></div></div>
 <img id="finn_win_img" src="http://images.wikia.com/creepypasta/images/3/38/Adventure-time-with-finn-and-jake.jpg">
 </div>
-<div id="arrowp_box">
+<!--<div id="arrowp_box">
 <div id="arrow"><img src="/arrow2.png"></div>
 <div id="arrowp_content">Pole z produktami (można klikać ^ ^)</div>
-</div>
+</div>-->
 </div>

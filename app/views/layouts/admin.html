@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Fse </title>
+  <title>Fse (admin)</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
@@ -34,7 +34,7 @@
         <p class="alert"><%= alert %></p>
 
     <div id="logo">
-	<a href="/">FSE</a> 
+	<a href="/">FSE </a> <a href="/admin">ADMIN</a>
 <!--	<div id="arrowl_box">
 	    <div id="arrowl"><img src="/arrow3.png"></div>
 	    <div id="arrowl_content">Idz do indeks!</div>
@@ -50,6 +50,17 @@
 <a href="#"><span class="button">Informacje o nas<span></a>
 <a href="#"><span class="button">Pomoc<span></a>
 <a href="#"><span class="button">Koszyk<span></a> 
+</div>
+      <div id="admin_bar">
+<!--<div id="arrowc_box">
+<div id="arrowc"><img src="/arrow.png"></div>
+<div id="arrowc_content">Kategorie</div>
+</div > -->
+<a href="/"><span class="button">Pulpit<span></a>
+<a href="/admin/category/"><span class="button">Kategorie<span></a>
+<a href="#"><span class="button">Produkty<span></a>
+<a href="#"><span class="button">Historia zamówień<span></a>
+<a href="#"><span class="button">Użytkownicy<span></a> 
 </div>
 <div id="cart_outside">
 <div id="cart">
@@ -95,9 +106,9 @@
     <div id="frame">
 	    <%= yield %>
     </div>
-  <!--  <div id="finn">
-	<div id="cloud">Przygoda trwa!<div id="cloud_triangle_l"></div></div>
+  <div id="finn">
+	<div id="cloud">No siema!<br>Co montujesz?<div id="cloud_triangle_l"></div></div>
     <img src="http://images1.wikia.nocookie.net/__cb20120921151660/adventuretimewithfinnandjake/images/f/f3/Original_Finn.png">
-    </div>-->
+    </div>
 </body>
 </html>
