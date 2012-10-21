@@ -55,7 +55,7 @@
 <div id="cart">
 
   <a id="cart_icon" onclick="cart_click()"><img src="/assets/cart.png"><br>Koszyk<br>
-    <% if session[:buyer] %><% if session[:buyer].cart %>(<%= session[:buyer].cart.cart_items.count %>)<% else %>(0)<% end %><% end %></a>
+    <% if session[:buyer] && session[:buyer].cart %>(<%= session[:buyer].cart.cart_items.count %>)<% else %>(0)<% end %></a>
   <div id="cart_content">
     <div id="cart_title">Twój koszyk</div>
 
@@ -65,8 +65,7 @@
           <div class="cart_finn"><div id="cart_cloud">Ziomuś! rzuć tutaj<br>Zaufaj mi!<div id="cart_cloud_triangle_l"></div></div></div>
 
     </div>
-    <% if session[:buyer] %>
-    <% if session[:buyer].cart %>
+    <% if session[:buyer] && session[:buyer].cart %>
     <% session[:buyer].cart.cart_items.reverse.each do |cart_item| %>
       <%= render :partial => "shop/cart_object",  :locals => { :cart_item => cart_item }  %>
     <% end %>
@@ -77,7 +76,7 @@
     </div>
 
     <% end %>
-    <% end %>
+
     <div id="cart_summary">Suma: 200 zł</div>
       <a href="/order_summary"><div id="cart_end_button">Zakończ zakupy</div></a>
   </div>

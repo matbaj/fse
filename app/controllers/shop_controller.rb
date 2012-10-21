@@ -77,6 +77,7 @@ class ShopController < ApplicationController
 		@cartitem.save
 		session[:buyer].cart.cart_items.append(@cartitem)
 		session[:buyer].cart.save
+		session[:buyer].save
 
 		respond_to do |format|
 	  		format.html { render 'added' }
