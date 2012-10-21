@@ -6,7 +6,7 @@ var sum = 0;
 
 </script>
 
-<% session[:buyer].cart.cart_items.each do |cart_item| %>
+<% @buyer.cart.cart_items.each do |cart_item| %>
       <div class="cart_object" >
         <div class="price"><%= cart_item.thing.cost %> PLN</div>
         <script type="text/javascript">
@@ -29,7 +29,7 @@ $(document).ready(function() {
 });
 </script>
 <h2>SUMA: <span id="sum_content"></span> PLN</h2>
-<%= form_for(session[:buyer], :url => { :action => "order_payment" }) do |f| %>
+<%= form_for(@buyer, :url => { :action => "order_payment" }) do |f| %>
 <p>Imie: <%= f.text_field :first_name%></p>
 <p>Nazwisko: <%= f.text_field :last_name%></p>
 

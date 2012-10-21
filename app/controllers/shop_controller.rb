@@ -1,5 +1,12 @@
 class ShopController < ApplicationController
+	before_filter :set_buyer
+	def set_buyer
+		if session[:buyer_id] != nil
+	  		@buyer = Buyer.find(session[:buyer_id])
+		end
+	end
 
+	
 	def index
 		# render :text => "Hello in my shop!<br> <img src='http://images.wikia.com/adventuretimewithfinnandjake/images/f/f3/Original_Finn.png'>" :D
 		
@@ -27,10 +34,10 @@ class ShopController < ApplicationController
 
 	def order_payment
 		if request.method == 'POST'
-			session[:buyer].update_attributes(params[:buyer])
-			session[:buyer].save
+			@buyer.update_attributes(params[:buyer])
+			@buyer.save
 			@total = 0
-			session[:buyer].cart.cart_items.each do |item|
+			@buyer.cart.cart_items.each do |item|
 			 @total = @total+item.thing.cost
 			end
 
@@ -41,9 +48,9 @@ class ShopController < ApplicationController
 	end
 	def order_confirm
 		@order = Order.new
-		@order.buyer = session[:buyer]
+		@order.buyer = @buyer
 		@order.save
-		session[:buyer].cart.cart_items.each do  |item| 
+		@buyer.cart.cart_items.each do  |item| 
 			@order_item = OrderItem.new
 			@order_item.thing = item.thing.name
 			@order_item.cost =item.thing.cost
@@ -51,33 +58,32 @@ class ShopController < ApplicationController
 			@order_item.order = @order
 			@order_item.save
 		end
-		session[:buyer].cart = nil
+		@buyer.cart = nil
+		@buyer.save
 	end
 	def cart_item_add
-		if session[:buyer] == nil
-			session[:buyer] = Buyer.new
+		if session[:buyer_id] == nil
+			@buyer = Buyer.new
 			if user_signed_in?
-				session[:buyer].user = current_user
+				@buyer.user = current_user
 			end
 			@new_cart=true
-			session[:buyer].cart = Cart.new
-			session[:buyer].cart.save
-			session[:buyer].save
+			@buyer.cart = Cart.new
+			@buyer.cart.save
+			@buyer.save
+			session[:buyer_id] = @buyer.id
 		end
-		if session[:buyer].cart == nil
+		if @buyer.cart == nil
 			@new_cart=true
-			session[:buyer].cart = Cart.new
-			session[:buyer].cart.save
-			session[:buyer].save
+			@buyer.cart = Cart.new
+			@buyer.cart.save
+			@buyer.save
 		end
 		@cartitem = CartItem.new
 		@cartitem.thing_id= params[:thing_id]
-		#@cartitem.cart = session[:buyer].cart
+		@cartitem.cart = @buyer.cart
 		@cartitem.count = 1
 		@cartitem.save
-		session[:buyer].cart.cart_items.append(@cartitem)
-		session[:buyer].cart.save
-		session[:buyer].save
 
 		respond_to do |format|
 	  		format.html { render 'added' }

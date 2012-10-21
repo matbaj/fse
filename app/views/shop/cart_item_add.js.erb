@@ -1,5 +1,6 @@
 <% if @new_cart %>
 $("#empty_cart").hide();
 <%end %>
+$("#cart_counter")[0].innerHTML= parseInt($("#cart_counter")[0].innerHTML)+1;
 $("<%= escape_javascript(render :partial => 'cart_object',  :locals => { :cart_item => @cartitem }) %>").insertAfter('#cart_new_object').highlight();
 
