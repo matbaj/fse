@@ -26,8 +26,14 @@ class ShopController < ApplicationController
 	def search
 		@categories = Category.all
 		#@things = Thing.all
-		@q = Thing.search(params[:q])
+		@q = Thing.search(:name_cont => params[:q][:name_cont])
 		@things = @q.result(:distinct => true)
+		if params[:q][:about_true]
+			@asd = true
+			@about_q = Thing.search(:about_cont => params[:q][:name_cont])
+			@things += @about_q.result(:distinct => true)
+		end
+		
  	 	
 	end
 	def order_payment

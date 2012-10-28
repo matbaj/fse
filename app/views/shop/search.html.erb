@@ -2,10 +2,11 @@
 Szukaj szybko:<%= search_form_for @q, :url => search_path,
                         :html => {:method => :post} do |f| %>
                         <%= f.text_field :name_cont %>
+                        <%= check_box_tag 'q[about_true]' %>Szukaj w opisach
                          <%= f.submit %>
                         <% end %>
 <div id="content">
-<div class="content_title">Znalezione Produkty</div>
+<div class="content_title">Znalezione Produkty(<%=@things.count%>)[<%= @asd %>]</div>
 <div id="searcher">
 <%= search_form_for @q, :url => search_path, :html => {:method => :post} do |f| %>
 
