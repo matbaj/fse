@@ -1,12 +1,3 @@
-<div id="categories">
-<!--<div id="arrowc_box">
-<div id="arrowc"><img src="/arrow.png"></div>
-<div id="arrowc_content">Kategorie</div>
-</div>-->
-<% @categories.each do |category| %>
-<a href="/category/<%=category.id%>"><span class="button"><%= category.name %><span></a>
-
-<% end %></div>
 <div id="content">
 
 <div class="content_title"><%= @thing.name %></div>

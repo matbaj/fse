@@ -1,0 +1,15 @@
+<div id="content">
+<div class="content_title">Produkty</div>
+<%= link_to "Utwórz Produkt", new_admin_thing_path %><br><br>
+<% @things.each do |thing| %>
+	<span class="button"><%=link_to thing.name, edit_admin_thing_path(thing) %><span>
+	 Kategoria 
+	 <% if thing.category %>
+	 <%= thing.category.name %>
+	 <% else %>
+	 BRAK KATEGORII
+	 <% end %>
+	 <%=link_to "Usuń (DANGEROUS!)", admin_thing_path(thing),method: :delete %> <br><br>
+
+<% end %>
+</div>

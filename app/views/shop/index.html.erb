@@ -1,17 +1,9 @@
-<div id="categories">
 
 
-<% @categories.each do |category| %>
-	<a href="/category/<%=category.id%>"><span class="button"><%= category.name %><span></a>
-
-<% end %></div>
 <div id="content">
 <div class="content_title">Produkty</div>
 <% @things.each do |thing| %>
 <%= render :partial => "offer_box",  :locals => { :thing => thing }  %>
 <% end %>
-<!--<div id="arrowp_box">
-<div id="arrow"><img src="/arrow2.png"></div>
-<div id="arrowp_content">Pole z produktami (można klikać ^ ^)</div>
-</div>-->
+
 </div>

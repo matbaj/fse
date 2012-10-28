@@ -57,10 +57,9 @@
 <div id="arrowc_content">Kategorie</div>
 </div > -->
 <a href="/admin/"><span class="button">Pulpit<span></a>
-<a href="/admin/category/"><span class="button">Kategorie<span></a>
-<a href="/admin/thing"><span class="button">Produkty<span></a>
-<a href="/admin/order_history"><span class="button">Historia zamówień<span></a>
-<a href="/admin/users"><span class="button">Użytkownicy<span></a> 
+<span class="button"><%= link_to 'Kategorie', admin_categories_path %></span>
+<span class="button"><%= link_to 'Produkty', admin_things_path %></span>
+<span class="button"><%= link_to 'Zamówienia', admin_orders_path %></span>
 </div>
 
     <div id="frame">

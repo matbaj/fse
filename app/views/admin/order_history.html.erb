@@ -1,8 +1,0 @@
-<div id="content">
-<div class="content_title">Historia zamówień</div>
-
-<% @orders.reverse.each do |order| %>
-	<a href="/admin/order_detail/<%=order.id%>"><span class="button"><%= order.buyer.first_name %> <%= order.buyer.last_name %>@<%= order.updated_at %> <span></a> (Ilość produktów <%= order.order_items.count %>) <br><br>
-
-<% end %>
-</div>

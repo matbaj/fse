@@ -1,0 +1,11 @@
+<div id="content">
+<div class="content_title">Tworzysz Kategorie</div>
+
+<%= form_for([:admin,@category]) do |f| %>
+<p>Tytuł: <%= f.text_field :name%></p>
+<%= f.submit %>
+<% end %>
+
+
+
+</div>

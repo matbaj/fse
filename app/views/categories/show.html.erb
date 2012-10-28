@@ -3,7 +3,7 @@
 <div class="content_title">Produkty @ <%=@category.name%></div>
 
 <% @category.things.each do |thing| %>
-<%= render :partial => "offer_box",  :locals => { :thing => thing }  %>
+<%= render :partial => "shop/offer_box",  :locals => { :thing => thing }  %>
 <% end %>
 <div id="finn_win">
 <div id="cloud">Tyle artykułów...<br>Tyle wygrać<div id="cloud_triangle_l"></div></div>

@@ -1,4 +1,4 @@
 	<div class="offer_box" id="#offer_<%= thing.id %>">
 	<b><%= thing.name %></b><br><br>
-	<span class="price"><%= thing.cost %> zł</span><br><a href="/thing/<%= thing.id %>"><input  class="button" type="button" value='Wybierz'></a>
+	<span class="price"><%= thing.cost %> zł</span><br><a href="<%= thing_path(thing.id) %>"><input  class="button" type="button" value='Wybierz'></a>
 	</div>

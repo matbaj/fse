@@ -1,7 +1,7 @@
 <div id="content">
-<div class="content_title">Edytujesz produkt <%= @thing.name %></div>
+<div class="content_title">Tworzysz Produkt</div>
 
-<%= form_for(@thing, :url => { :action => "thing_edit" }) do |f| %>
+<%= form_for([:admin,@thing]) do |f| %>
 <p>Tytuł: <%= f.text_field :name%></p>
 <p>Opis: <%= f.text_field :about%></p>
 <p>Cena: <%= f.text_field :cost%></p>

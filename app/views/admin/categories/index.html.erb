@@ -1,0 +1,14 @@
+<div id="content">
+<div class="content_title">Kategorie</div>
+Nowa kategoria
+<%= form_for([:admin,@category]) do |f| %>
+Nazwa: <%= f.text_field :name%>
+<%= f.submit %>
+<% end %>
+<br><br>
+<% @categories.each do |category| %>
+	<span class="button"><%=link_to category.name, edit_admin_category_path(category)%><span> (Ilość produktów w kategorii <%= category.things.count %>) <%=link_to "Usuń (DANGEROUS!)", admin_category_path(category),method: :delete %><br><br>
+
+<% end %>
+
+</div>

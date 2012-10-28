@@ -452,6 +452,10 @@ color:#fff;
 font-size:14px;
 margin-left:0px;
 }
+#admin_bar a {
+color:#fff;
+	
+}
 #admin_bar span.button:hover {
 background-color:#0f0f0f;
 border-radius: 5px;
