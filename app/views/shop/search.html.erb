@@ -5,7 +5,17 @@ Szukaj szybko:<%= search_form_for @q, :url => search_path,
                          <%= f.submit %>
                         <% end %>
 <div id="content">
-<div class="content_title">Produkty</div>
+<div class="content_title">Znalezione Produkty</div>
+<div id="searcher">
+<%= search_form_for @q, :url => search_path, :html => {:method => :post} do |f| %>
+
+Nazwa:<%= f.text_field :name_cont %><br>
+Opis:<%= f.text_field :about_cont %> <br>
+cena: Od <%= f.text_field :cost_gteq %> Do <%= f.text_field :cost_lteq %>   
+ <%= f.submit %>
+<% end %>
+
+	</div>
 <% @things.each do |thing| %>
 <%= render :partial => "offer_box",  :locals => { :thing => thing }  %>
 <% end %>

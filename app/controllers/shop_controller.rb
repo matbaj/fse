@@ -12,7 +12,8 @@ class ShopController < ApplicationController
 		
 		@categories = Category.all
 		#@things = Thing.all
-	
+		@q = Thing.search(params[:q])
+		@things = @q.result(:distinct => true)
 	end
 
 
@@ -22,7 +23,13 @@ class ShopController < ApplicationController
 
 
 	end
-
+	def search
+		@categories = Category.all
+		#@things = Thing.all
+		@q = Thing.search(params[:q])
+		@things = @q.result(:distinct => true)
+ 	 	
+	end
 	def order_payment
 		if request.method == 'POST'
 			@buyer.update_attributes(params[:buyer])
