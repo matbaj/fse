@@ -23,6 +23,8 @@ end
 gem 'jquery-rails'
 
 gem 'ransack'
+gem 'faker' 
+gem 'populator', :git => 'git://github.com/ryanb/populator.git'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
