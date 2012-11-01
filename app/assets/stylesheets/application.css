@@ -190,6 +190,21 @@ top:-50px;
 width: 100px;
 
 }
+#finn_spa {
+position: absolute;
+top:150px;
+left:50%;
+margin-left:-147px;
+
+
+}
+#finn_spa #cloud {
+position:absolute;
+left: 120px;
+top:-38px;
+min-width: 160px;
+
+}
 #jake #cloud {
 position:absolute;
 left: 50px;

@@ -25,6 +25,7 @@ gem 'jquery-rails'
 gem 'ransack'
 gem 'faker' 
 gem 'populator', :git => 'git://github.com/ryanb/populator.git'
+gem 'handlebars_assets'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
