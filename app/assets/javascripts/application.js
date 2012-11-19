@@ -21,12 +21,5 @@
 //= require YouAreDaBomb
 //= require YouAreDaChef
 //= require handlebars
-
-//app
-//= require utils
-//= require ls
-//= require usecase
-//= require wg
-//= require webglue
 //= require_tree .
 
