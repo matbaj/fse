@@ -13,7 +13,9 @@ Fse::Application.routes.draw do
   root :to => "shop#index"
   match '/search' => 'shop#search', :via => [:get, :post], :as => :search
   match 'cart_item_add(.:format)' => "shop#cart_item_add"
+  match '/spa/:action', :controller => 'spa'
   match '/spa', :controller => 'spa', :action => "index"
+
   match ':action(/:id)', :controller => 'shop'
 
   # match ':controller(/:action(/:id))(.:format)'

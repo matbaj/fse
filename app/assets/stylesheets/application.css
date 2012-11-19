@@ -17,7 +17,9 @@ body {
 	position:absolute;
 margin:0;
 padding:0;
-background: #eeeeec;
+/*background: #eeeeec; */
+
+
 font-family: Verdana;
 color:#2e2e2e;
 width:100%;
@@ -65,7 +67,20 @@ display:inline-block;
 text-align:center;
 min-width:100px;
 min-height:50px;
-background-color: #eeeeec;
+background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(255,255,255)),
+    color-stop(1, rgb(219,219,219))
+);
+
+background-image: -moz-linear-gradient(
+    center bottom,
+    rgb(219,219,219) 0%,
+    rgb(255,255,255) 100%
+    
+);
 box-shadow: 0 0px 1px #909090;
 font-size:12px;
 padding:20px;
@@ -474,5 +489,24 @@ color:#fff;
 #admin_bar span.button:hover {
 background-color:#0f0f0f;
 border-radius: 5px;
+
+}
+#detail_page {
+	margin:0;
+	top:0;
+	position:fixed;
+	z-index:100;
+	width:100%;
+	height:100%;
+	background:url("/detail_bg.png");
+
+}
+.content_about {
+	float:right;
+
+}
+.content_price {
+	font-size:20px;
+	font-weight: bold;
 
 }

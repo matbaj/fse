@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<!---
+
+
+
+  -->
 <html>
 <head>
   <title>Fse SPA </title>
@@ -13,6 +18,66 @@
     <meta name="Author" content="greyfox" /> 
 </head>
 <body>
+  <!-- To bedzie tutaj bo nie znalazlem lepszego miejsca narazie -->
+       <p class="notice"><%= notice %></p>
+        <p class="alert"><%= alert %></p>
+
+    <div id="logo">
+  <a href="/">FSE</a> 
+<!--  <div id="arrowl_box">
+      <div id="arrowl"><img src="/arrow3.png"></div>
+      <div id="arrowl_content">Idz do indeks!</div>
+  </div> -->
+    </div>
+      <div id="menu_bar">
+<!--<div id="arrowc_box">
+<div id="arrowc"><img src="/arrow.png"></div>
+<div id="arrowc_content">Kategorie</div>
+</div > -->
+<a href="#"><span class="button">Strona główna<span></a>
+<a href="#"><span class="button">Kategorie<span></a>
+<a href="#"><span class="button">Informacje o nas<span></a>
+<a href="#"><span class="button">Pomoc<span></a>
+<a href="#"><span class="button">Koszyk<span></a> 
+</div>
+<div id="cart_outside">
+<div id="cart">
+
+  <a id="cart_icon" onclick="cart_click()"><img src="/assets/cart.png"><br>Koszyk<br>
+    <% if @buyer && @buyer.cart %>(<span id="cart_counter"><%= @buyer.cart.cart_items.count %></span>)<% else %>(<span id="cart_counter">0</span>)<% end %></a>
+  <div id="cart_content">
+    <div id="cart_title">Twój koszyk</div>
+
+    <div id="cart_objects">
+      <div class="cart_object" id="cart_new_object">
+          <div class="add_here"><img src="/assets/go-jump.png"></div>
+          <div class="cart_finn"><div id="cart_cloud">Ziomuś! rzuć tutaj<br>Zaufaj mi!<div id="cart_cloud_triangle_l"></div></div></div>
+
+    </div>
+    <% if @buyer && @buyer.cart %>
+    <% @buyer.cart.cart_items.reverse.each do |cart_item| %>
+      <%= render :partial => "shop/cart_object",  :locals => { :cart_item => cart_item }  %>
+    <% end %>
+    <% else %>
+            <div class="cart_object" id="empty_cart">
+              Nie posiadasz koszyka lub nie jesteś zalogowany
+
+    </div>
+
+    <% end %>
+
+    <div id="cart_summary">Suma: 200 zł</div>
+      <a href="/order_summary"><div id="cart_end_button">Zakończ zakupy</div></a>
+  </div>
+
+
+
+  </div>
+</div>
+</div>
+
+
+
 <%= yield %>
 </body>
 </html>

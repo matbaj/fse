@@ -39,7 +39,7 @@ cart_new_hidden= 1
 	else
 		cart_hide()
 
-$ ->
+@dropable = () ->
 	$('.offer_box').draggable({
 	    helper: "clone",
 	    revert: "invalid",
@@ -57,3 +57,7 @@ $ ->
 		drop: (event, ui) ->
 			cart_add_new(ui.draggable[0].id.split("_")[1])
 	})
+
+
+# -> 
+# 	@dropable
