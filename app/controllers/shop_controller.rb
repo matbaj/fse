@@ -8,6 +8,7 @@ class ShopController < ApplicationController
 
 	
 	def index
+		redirect_to '/spa'
 		# render :text => "Hello in my shop!<br> <img src='http://images.wikia.com/adventuretimewithfinnandjake/images/f/f3/Original_Finn.png'>" :D
 		
 		@categories = Category.all

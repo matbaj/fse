@@ -38,6 +38,48 @@
 
     </div>
 </script>
+
+<script id="order_finalize_tpl" type="text/x-handlebars-template">
+
+<div class="content_title">Finalizacja Zamówienia <input class="button close_btn" type="button" value='Anuluj'>
+ </div>
+ <div class="order_table">{{{order_list}}}</div>
+<div class="order_summary">Suma do zapłaty {{sum}} PLN</div>
+Wprowadz dane:<br>
+Imie: <input type="text" id="order_first_name"><br>
+Nazwisko: <input type="text" id="order_last_name"><br>
+<input class="THE_LAST_FINALIZE_BUTTON" type="button" value="zapłać">
+
+
+
+</script>
+<script id="order_finalize_tpl" type="text/x-handlebars-template">
+
+<div class="content_title">Finalizacja Zamówienia <input class="button close_btn" type="button" value='Anuluj'>
+ </div>
+ <div class="order_table">{{{order_list}}}</div>
+<div class="order_summary">Suma do zapłaty {{sum}} PLN</div>
+Wprowadz dane:<br>
+Imie: <input type="text" id="order_first_name"><br>
+Nazwisko: <input type="text" id="order_last_name"><br>
+<input class="THE_LAST_FINALIZE_BUTTON" type="button" value="zapłać">
+
+
+
+</script>
+
+<script id="order_object_tpl" type="text/x-handlebars-template">
+
+      <div class="order_object "  >
+        <div class="price">Jednostkowo {{thing.cost}}PLN</div>
+        <div class="title">{{thing.name}}</div>
+        <div class="price_sum">razem {{sum}}PLN</div>
+        <div class="count">Sztuk:{{quantity}}</div>
+        <br>
+
+    </div>
+</script>
+
 <div id="detail_page">
 	<div id="frame">
 		<div id="content" class="detail_content">

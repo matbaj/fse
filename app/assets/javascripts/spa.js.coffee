@@ -147,6 +147,17 @@ class UseCase
     cart_object = new CartObject(UUIDjs.randomUI48(),@get_thing(id),1)
     @cart.push(cart_object)
 
+  send_order: () =>
+    console.log("Sending data to backend")
+    first = $("#order_first_name").val()
+    last = $("#order_last_name").val()
+    things_array = []
+    for c in @cart
+      things_array.push([c.thing.id,c.quantity])
+    data = { t:things_array, first: first, last: last }
+    console.log(data)
+    $.post("/spa/send_order",  data);
+
 
 
 #Models
@@ -162,6 +173,7 @@ class CartObject
 #WEB GUI
 class WebGui
   constructor: ->
+    $("#cart_end_button").click( => @finalizeOrder())
     $("#cart_new_object").droppable({
       drop: (event, ui) ->
         _this.cart_add_new(ui.draggable[0].id.split("_")[1])
@@ -219,7 +231,7 @@ class WebGui
 
 
     
-
+  finalizeOrder: () ->
 
 
   page_detail_hide: () =>
@@ -294,6 +306,21 @@ class WebGui
     $("#cart_sum").html(sum)
     $("#cart_summary").effect("highlight", {}, 1000);
 
+  prepareOrderDetails: (cart) =>
+    source = $("#order_object_tpl").html()
+    order_list = ""
+    sum = 0
+    for co in cart
+      template = Handlebars.compile(source)
+      data = {thing: co.thing,id: co.id, quantity: co.quantity, sum: co.thing.cost*co.quantity}
+      order_list += template(data)
+      sum += co.thing.cost*co.quantity
+    source = $("#order_finalize_tpl").html()
+    template = Handlebars.compile(source)
+    data = {order_list: order_list,sum: sum}
+    $(".detail_content").html(template(data))
+    $(".close_btn").click( => @page_detail_hide())
+    $(".THE_LAST_FINALIZE_BUTTON").click( => @finalizePayment())
 
 
   quantityChange: (id) =>
@@ -307,6 +334,9 @@ class WebGui
     $("#co_"+id).remove();
 
 
+  #7:00 ... and the last method
+  finalizePayment: () => # And it will be just an event :D
+    alert("AAaaand it's GONE")
 
 #END WEBGUI
 
@@ -322,6 +352,9 @@ class WebGlue
     Before(@gui, 'showDetail', (id) => @gui.set_detail_content(@useCase.get_thing(id)))
     Before(@gui, 'quantityChange', (id) => @useCase.update_co(id))
     Before(@gui, 'remove_co', (id) => @useCase.remove_co(id))
+    Before(@gui, 'finalizeOrder', => @gui.prepareOrderDetails(@useCase.cart))
+    Before(@gui, 'finalizePayment', => @useCase.send_order())
+
     After(@useCase, 'new_cart_object', => @storage.set('cart', @useCase.cart))
     After(@useCase, 'new_cart_object', => @gui.counter_update(@useCase.cart))
     After(@useCase, 'new_cart_object', => @gui.addNewCartObject(@useCase.cart.last()))
@@ -340,6 +373,9 @@ class WebGlue
     After(@useCase, 'remove_co', => @storage.set('cart', @useCase.cart))
     After(@useCase, 'remove_co', => @gui.counter_update(@useCase.cart))
     After(@useCase, 'remove_co', => @gui.sum_cart(@useCase.cart))
+    After(@gui, 'finalizeOrder', => @gui.page_detail_show())
+    
+
 
     #LogAll(@useCase)
     #LogAll(@gui)

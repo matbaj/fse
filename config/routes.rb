@@ -18,5 +18,5 @@ Fse::Application.routes.draw do
 
   match ':action(/:id)', :controller => 'shop'
 
-  # match ':controller(/:action(/:id))(.:format)'
+  match ':controller(/:action(/:id))(.:format)'
 end

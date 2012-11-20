@@ -510,3 +510,38 @@ border-radius: 5px;
 	font-weight: bold;
 
 }
+.order_summary {
+	float:right;
+	font-weight: bold;
+	font-size:30px;
+
+
+}
+.order_object {
+	border: 1px solid #555753;
+
+	width:100%;
+	padding: 5px;
+	margin-bottom:10px;
+
+
+
+
+}
+.order_object .title {
+	font-size:20px;
+
+
+}
+.order_object .price {
+	float:right;
+
+
+}
+.order_object .price_sum {
+	float:right;
+	font-size:20px;
+	font-weight: bold;
+
+
+}
