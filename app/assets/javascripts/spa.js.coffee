@@ -29,15 +29,10 @@ class LocalStorage
     $.jStorage.get("#{@namespace}/#{key}")
 
   fetchThings: =>
-    callback = (response) => 
-      @set("things", response)
-    $.get '/spa/things/', {}, callback, 'json'
-    $("#alert").ajaxError( (event, request, settings) =>
-      $(this).append("<li>Error requesting page " + settings.url + "</li>");
-    );
+
 
   getThings: =>
-    @get("things").map( (thingData) =>
+    @things = @get("things").map( (thingData) =>
         thing = new Thing(thingData.id, thingData.name, thingData.cost, thingData.about)
         return thing
     )
@@ -48,12 +43,6 @@ class LocalStorage
     return thing
 
   getCart: =>
-    #callback = (response) => 
-    #  @set("cart", response)
-    #$.get '/spa/cart/', {}, callback, 'json'
-    #$("#alert").ajaxError( (event, request, settings) =>
-    #  $(this).append("<li>Error requesting page " + settings.url + "</li>");
-    #);
     if(!@get("cart"))
       return []
     $("#empty_cart").hide()
@@ -126,6 +115,9 @@ class UseCase
 
   showAll: =>
 
+  cleancart: () ->
+    for co in @cart
+      @remove_co(co.id)
   remove_co: (id) =>
     for co in @cart
       if "#{co.id}" == "#{id}"
@@ -336,7 +328,13 @@ class WebGui
 
   #7:00 ... and the last method
   finalizePayment: () => # And it will be just an event :D
-    alert("AAaaand it's GONE")
+  
+  preparefinishpage: () =>
+    source = $("#done_page_tpl").html()
+    template = Handlebars.compile(source)
+    $(".detail_content").html(template())
+    $(".close_btn").click( => @page_detail_hide())
+
 
 #END WEBGUI
 
@@ -345,7 +343,6 @@ class WebGlue
   constructor: (@useCase, @gui, @storage)->
     AutoBind(@gui, @useCase)
     After(@gui, 'keyPressed',  => @gui.setfilter(@useCase.things))
-    Before(@storage, 'getThings',  => @storage.fetchThings())
     Before(@useCase, 'showAll',  => @useCase.setInitialThings(@storage.getThings()))
     Before(@useCase, 'showAll',  => @useCase.setInitialCart(@storage.getCart()))
     Before(@gui, 'cart_add_new', (id) =>  @useCase.new_cart_object(id))
@@ -374,7 +371,10 @@ class WebGlue
     After(@useCase, 'remove_co', => @gui.counter_update(@useCase.cart))
     After(@useCase, 'remove_co', => @gui.sum_cart(@useCase.cart))
     After(@gui, 'finalizeOrder', => @gui.page_detail_show())
-    
+    After(@useCase, 'finalizePayment', => @gui.page_detail_hide())
+    After(@useCase, 'send_order', =>@gui.preparefinishpage())
+    After(@useCase, 'send_order', =>@useCase.cleancart())
+    After(@gui, 'preparefinishpage', =>@gui.page_detail_show())
 
 
     #LogAll(@useCase)
@@ -390,7 +390,14 @@ class SPA
     gui = new WebGui()
     localStorage = new LocalStorage("spa")
     glue = new WebGlue(useCase, gui, localStorage)
-    useCase.showAll()
+    callback = (response) => 
+      localStorage.set("things", response)
+      useCase.showAll()
+    $.get '/spa/things/', {}, callback, 'json'
+    $("#alert").ajaxError( (event, request, settings) =>
+      $(this).append("<li>Error requesting page " + settings.url + "</li>");
+    );
+    
 
 
 $ ->
