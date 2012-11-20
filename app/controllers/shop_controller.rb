@@ -1,6 +1,9 @@
 class ShopController < ApplicationController
 	before_filter :set_buyer
 	def set_buyer
+		if user_signed_in?
+			redirect_to '/admin'
+		end
 		if session[:buyer_id] != nil
 	  		@buyer = Buyer.find(session[:buyer_id])
 		end
