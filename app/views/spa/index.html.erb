@@ -2,7 +2,7 @@
 	<div class="offer_box" id="offer_{{id}}">
 	<b>{{name}}</b><br><br>
 	<span class="price">{{cost}} zł</span><br><input  class="button detail_btn" type="button" value='Detale'>
-	<input  class="button" type="button" value='Do koszyka'>
+	<input  class="button to_cart_btn" type="button" value='Do koszyka'>
 	</div>
 
 
@@ -15,7 +15,7 @@
 
 <script id="detail_tpl" type="text/x-handlebars-template">
 
-<div class="content_title">{{name}}	<input  class="button" type="button" value='Do koszyka'><input  class="button close_btn" type="button" value='Zamknij'>
+<div class="content_title">{{name}}	<input  class="button close_btn" type="button" value='Zamknij'>
  </div>
 
 <div class="content_about">{{about}}</div>
@@ -25,6 +25,18 @@
 <img id="jake_img" src="http://3.bp.blogspot.com/_inTbHVA4clo/TIPX1HflkII/AAAAAAAAACU/wRg07kAv-ME/s1600/adventure-time-with-finn-and-jake-john-dimaggio-2.jpg">
 </div>
 
+</script>
+<script id="cart_object_tpl" type="text/x-handlebars-template">
+
+      <div class="cart_object thing" id="co_{{id}}" >
+        <div class="price">{{thing.cost}}PLN</div>
+        <div class="title">{{thing.name}}</div>
+        <div class="price_sum">{{sum}}PLN</div>
+        <div class="count">Sztuk:<input class="quantity" type="number" size="2" value="{{quantity}}"></div>
+        <div class="remove_button">Usuń</div>
+        <br>
+
+    </div>
 </script>
 <div id="detail_page">
 	<div id="frame">

@@ -13,7 +13,9 @@
 
 #And this is the end of easy part ):
 
-
+@cart_hidden= 1
+@cart_new_hidden= 1
+@page_detail_hidden = 0
 
 #local storage
 class LocalStorage
@@ -26,13 +28,15 @@ class LocalStorage
   get: (key) =>
     $.jStorage.get("#{@namespace}/#{key}")
 
-  getThings: =>
+  fetchThings: =>
     callback = (response) => 
       @set("things", response)
     $.get '/spa/things/', {}, callback, 'json'
     $("#alert").ajaxError( (event, request, settings) =>
       $(this).append("<li>Error requesting page " + settings.url + "</li>");
     );
+
+  getThings: =>
     @get("things").map( (thingData) =>
         thing = new Thing(thingData.id, thingData.name, thingData.cost, thingData.about)
         return thing
@@ -43,6 +47,20 @@ class LocalStorage
     thing = new Thing(id,name,cost)
     return thing
 
+  getCart: =>
+    #callback = (response) => 
+    #  @set("cart", response)
+    #$.get '/spa/cart/', {}, callback, 'json'
+    #$("#alert").ajaxError( (event, request, settings) =>
+    #  $(this).append("<li>Error requesting page " + settings.url + "</li>");
+    #);
+    if(!@get("cart"))
+      return []
+    $("#empty_cart").hide()
+    @get("cart").map( (cartData) =>
+        object = new CartObject(cartData.id,cartData.thing, cartData.quantity)
+        return object
+    )
 
   remove: (key) =>
     $.jStorage.deleteKey("#{@namespace}/#{key}")
@@ -98,18 +116,36 @@ _.defaults this,
 class UseCase
   constructor: ->
     @things = []
+    @cart = []
 
   setInitialThings: (things) =>
     @things = things
 
+  setInitialCart: (cart) =>
+    @cart = cart
 
   showAll: =>
+
+  remove_co: (id) =>
+    for co in @cart
+      if "#{co.id}" == "#{id}"
+        @cart.remove(co)
 
   get_thing: (id) =>
     for thing in @things
       if "#{thing.id}" == "#{id}"
         return thing
-
+  update_co: (id) =>
+    i=0
+    for co in @cart
+      if "#{co.id}" == "#{id}"
+        @cart[i].quantity = parseInt($("#co_"+id+" .count .quantity").val())
+        sum = @cart[i].quantity * parseInt(@cart[i].thing.cost)
+        $("#co_"+id+" .price_sum").html("#{sum} PLN") #Very very very dirty but it's 5:39:50!
+    i++  
+  new_cart_object: (id) =>
+    cart_object = new CartObject(UUIDjs.randomUI48(),@get_thing(id),1)
+    @cart.push(cart_object)
 
 
 
@@ -118,6 +154,9 @@ class Thing
   constructor: (@id, @name, @cost, @about) ->
 
 
+class CartObject
+  constructor: (@id, @thing, @quantity) ->
+
 #END USE CASE
 
 #WEB GUI
@@ -125,9 +164,10 @@ class WebGui
   constructor: ->
     $("#cart_new_object").droppable({
       drop: (event, ui) ->
-        cart_add_new(ui.draggable[0].id.split("_")[1])
+        _this.cart_add_new(ui.draggable[0].id.split("_")[1])
     })
     $("#search").keyup( => @keyPressed())
+    $("#q_about_true").change( => @keyPressed())
     $('#detail_page').click( => @page_detail_hide())
     $("#detail_page #frame").click((e) => e.stopPropagation())
     @thingsElements = []
@@ -135,21 +175,39 @@ class WebGui
     @cart_new_hidden= 1
     @page_detail_hidden = 0
 
+  set_quantity_changable: (quantityChange) ->
+    $(".quantity").unbind('change');
+    $(".quantity").change(-> quantityChange(this.parentNode.parentNode.id.split("_")[1]))
+
+  set_removable_co: (remove_co) ->
+    $(".remove_button").unbind('click');
+    $(".remove_button").click(-> remove_co(this.parentNode.id.split("_")[1]))
+
   set_dragable: () ->
     $(".offer_box").dblclick(-> _this.showDetail(this.id.split("_")[1]) )
     $(".detail_btn").click(-> _this.showDetail(this.parentNode.id.split("_")[1]) )
+    $(".to_cart_btn").click(-> _this.cart_add_new(this.parentNode.id.split("_")[1]) )
     $('.offer_box').draggable(
       helper: "clone",
       revert: "invalid",
       start: () => 
-        cart_show()
-        cart_new_show()
+        if cart_hidden
+          $('#cart').animate({marginLeft: '-240px'},500, () -> cart_hidden=0)
+        if cart_new_hidden
+          $('#cart_new_object').effect("highlight",{},1000, () -> cart_new_hidden=0)
         $(this).css("z-index", 10) 
         
       stop: () => 
-        cart_new_hide()
+        if !cart_new_hidden
+          $('#cart_new_object').hide()
+          cart_new_hidden=1
 
     )
+
+  cart_add_new: (id) =>
+
+  counter_update: (cart) =>
+    $("#cart_counter").html(cart.length)
 
   set_detail_content: (thing) =>
     source = $("#detail_tpl").html()
@@ -159,7 +217,7 @@ class WebGui
     $(".detail_content").html(html)
     $(".close_btn").click( => @page_detail_hide())
 
-  showDetail: (id) =>
+
     
 
 
@@ -175,13 +233,6 @@ class WebGui
       @page_detail_hidden=0
       #$('#detail_page').effect("show",{},1000, () -> @page_detail_hidden=0)
 
-  cart_new_hide = () =>
-    if !@cart_new_hidden
-      $('#cart_new_object').hide( )
-      @cart_new_hidden=1
-  cart_new_show  = () =>
-    if @cart_new_hidden
-      $('#cart_new_object').effect("highlight",{},1000, () -> @cart_new_hidden=0)
 
   cart_hide = () =>
     if !@cart_hidden
@@ -189,7 +240,6 @@ class WebGui
 
   cart_show  = () =>
     if @cart_hidden
-      alert("pokazuje")
       $('#cart').animate({marginLeft: '-240px'},500, () -> @cart_hidden=0)
 
   createElementFor: (thing, templateId) =>
@@ -205,12 +255,19 @@ class WebGui
     @thingsElements.push(element)
     $("#product_list").append(element)
 
+  addNewCartObject: (cart_object) =>
+    #console.log(cart_object)
+    if _this.useCase.cart.length
+      $("#empty_cart").hide()  # UGLY HACK but works ^_^ ... i just need to somehow hide #empty_cart
+    source = $("#cart_object_tpl").html()
+    template = Handlebars.compile(source)
+    data = {thing: cart_object.thing,id: cart_object.id, quantity: cart_object.quantity, sum: cart_object.thing.cost*cart_object.quantity}
+    $(template(data)).insertAfter('#cart_new_object');
 
   setfilter: (things) =>
     search = $("#search").val()
-    console.log(search)
     for thing in things
-      if thing.name.has(search)
+      if (thing.name.has(search) || ($("#q_about_true").is(':checked')  && thing.about.has(search) ))
         @showThing(thing)
       else
         @hideThing(thing)
@@ -221,18 +278,33 @@ class WebGui
   showThing: (thing) =>
     $("#offer_"+thing.id).removeClass("offer_hidden");
 
-
+  showCart: (cart) =>
+    for cart_object in cart
+      @addNewCartObject(cart_object)
 
   showThings: (things) =>
     $("#product_list").html("")
     for thing in things
       @addNewThing(thing)
 
+  sum_cart: (cart) =>
+    sum = 0
+    for co in cart
+      sum += co.thing.cost*co.quantity
+    $("#cart_sum").html(sum)
+    $("#cart_summary").effect("highlight", {}, 1000);
+
+
+
+  quantityChange: (id) =>
+
+  showDetail: (id) =>
+
 
   keyPressed: () =>
   
-
-
+  remove_co: (id) =>
+    $("#co_"+id).remove();
 
 
 
@@ -243,12 +315,32 @@ class WebGlue
   constructor: (@useCase, @gui, @storage)->
     AutoBind(@gui, @useCase)
     After(@gui, 'keyPressed',  => @gui.setfilter(@useCase.things))
+    Before(@storage, 'getThings',  => @storage.fetchThings())
     Before(@useCase, 'showAll',  => @useCase.setInitialThings(@storage.getThings()))
+    Before(@useCase, 'showAll',  => @useCase.setInitialCart(@storage.getCart()))
+    Before(@gui, 'cart_add_new', (id) =>  @useCase.new_cart_object(id))
+    Before(@gui, 'showDetail', (id) => @gui.set_detail_content(@useCase.get_thing(id)))
+    Before(@gui, 'quantityChange', (id) => @useCase.update_co(id))
+    Before(@gui, 'remove_co', (id) => @useCase.remove_co(id))
+    After(@useCase, 'new_cart_object', => @storage.set('cart', @useCase.cart))
+    After(@useCase, 'new_cart_object', => @gui.counter_update(@useCase.cart))
+    After(@useCase, 'new_cart_object', => @gui.addNewCartObject(@useCase.cart.last()))
     After(@useCase, 'showAll',  => @gui.showThings(@useCase.things))
+    After(@useCase, 'showAll',  => @gui.showCart(@useCase.cart))
+    After(@useCase, 'showAll', => @gui.counter_update(@useCase.cart))
+    After(@useCase, 'showAll', => @gui.sum_cart(@useCase.cart))
+    After(@useCase, 'new_cart_object', => @gui.sum_cart(@useCase.cart))
+    After(@gui, 'addNewCartObject', =>  @gui.set_quantity_changable(@gui.quantityChange))
+    After(@gui, 'addNewCartObject', =>  @gui.set_removable_co(@gui.remove_co))
     After(@gui, 'showThings',  => @gui.set_dragable())
     After(@gui, 'showThings',  => @gui.page_detail_hide())
-    Before(@gui, 'showDetail', (id) => @gui.set_detail_content(@useCase.get_thing(id)))
     After(@gui, 'showDetail', (id) => @gui.page_detail_show())
+    After(@useCase, 'update_co', => @storage.set('cart', @useCase.cart))
+    After(@useCase, 'update_co', => @gui.sum_cart(@useCase.cart))
+    After(@useCase, 'remove_co', => @storage.set('cart', @useCase.cart))
+    After(@useCase, 'remove_co', => @gui.counter_update(@useCase.cart))
+    After(@useCase, 'remove_co', => @gui.sum_cart(@useCase.cart))
+
     #LogAll(@useCase)
     #LogAll(@gui)
 

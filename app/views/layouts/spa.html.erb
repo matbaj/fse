@@ -54,19 +54,13 @@
           <div class="cart_finn"><div id="cart_cloud">Ziomuś! rzuć tutaj<br>Zaufaj mi!<div id="cart_cloud_triangle_l"></div></div></div>
 
     </div>
-    <% if @buyer && @buyer.cart %>
-    <% @buyer.cart.cart_items.reverse.each do |cart_item| %>
-      <%= render :partial => "shop/cart_object",  :locals => { :cart_item => cart_item }  %>
-    <% end %>
-    <% else %>
+
             <div class="cart_object" id="empty_cart">
               Nie posiadasz koszyka lub nie jesteś zalogowany
 
     </div>
 
-    <% end %>
-
-    <div id="cart_summary">Suma: 200 zł</div>
+    <div id="cart_summary">Suma: <span id="cart_sum">200</span> zł</div>
       <a href="/order_summary"><div id="cart_end_button">Zakończ zakupy</div></a>
   </div>
 
