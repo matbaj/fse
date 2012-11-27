@@ -126,26 +126,37 @@ class UseCase
 
   showAll: =>
 
+  checkIfEmpty: () ->
+    if @cart.length
+      @notEmptyCart()
+    else
+      @EmptyCart()
 
+  notEmptyCart: () ->
+
+  EmptyCart: () ->
 
   remove_co: (id) =>
     for co in @cart
       if "#{co.id}" == "#{id}"
         @cart.remove(co)
-      
+
+  get_co: (id) =>
+    for co in @cart
+      if "#{co.id}" == "#{id}"
+        return co    
 
   get_thing: (id) =>
     for thing in @things
       if "#{thing.id}" == "#{id}"
         return thing
-  update_co: (id) =>
-    i=0
+
+  update_co: (id,quantity) =>
     for co in @cart
       if "#{co.id}" == "#{id}"
-        @cart[i].quantity = parseInt($("#co_"+id+" .count .quantity").val())
-        sum = @cart[i].quantity * parseInt(@cart[i].thing.cost)
-        $("#co_"+id+" .price_sum").html("#{sum} PLN") #Very very very dirty but it's 5:39:50!
-    i++  
+        co.quantity = parseInt(quantity)
+
+  
   new_cart_object: (id) =>
     cart_object = new CartObject(UUIDjs.randomUI48(),@get_thing(id),1)
     @cart.push(cart_object)
@@ -234,6 +245,8 @@ class WebGui
     
   finalizeOrder: () ->
 
+  get_quantity: (id) ->
+    $("#co_"+id+" .count .quantity").val()
 
   page_detail_hide: () =>
     if !@page_detail_hidden
@@ -268,10 +281,13 @@ class WebGui
     @thingsElements.push(element)
     $("#product_list").append(element)
 
+  hideEmptyCart: () ->
+    $("#empty_cart").hide()
+
+  showEmptyCart: () ->
+    $("#empty_cart").show()
+
   addNewCartObject: (cart_object) =>
-    #console.log(cart_object)
-    if _this.useCase.cart.length
-      $("#empty_cart").hide()  # UGLY HACK but works ^_^ ... i just need to somehow hide #empty_cart
     source = $("#cart_object_tpl").html()
     template = Handlebars.compile(source)
     data = {thing: cart_object.thing,id: cart_object.id, quantity: cart_object.quantity, sum: cart_object.thing.cost*cart_object.quantity}
@@ -338,6 +354,10 @@ class WebGui
     for i in [cart.length-1..0] by -1
       this.remove_co(cart[i].id)
 
+  update_co: (id,cart_object) ->
+    sum = cart_object.quantity * parseInt(cart_object.thing.cost)
+    $("#co_"+id+" .price_sum").html("#{sum} PLN") #Very very very dirty but it's 5:39:50!
+
 
   #7:00 ... and the last method
   finalizePayment: () => # And it will be just an event :D
@@ -360,11 +380,15 @@ class WebGlue
     Before(@useCase, 'showAll',  => @useCase.setInitialCart(@storage.getCart()))
     Before(@gui, 'cart_add_new', (id) =>  @useCase.new_cart_object(id))
     Before(@gui, 'showDetail', (id) => @gui.set_detail_content(@useCase.get_thing(id)))
-    Before(@gui, 'quantityChange', (id) => @useCase.update_co(id))
-    
+    Before(@gui, 'quantityChange', (id) => @useCase.update_co(id,@gui.get_quantity(id)))
     Before(@gui, 'finalizeOrder', => @gui.prepareOrderDetails(@useCase.cart))
     Before(@gui, 'finalizePayment', => @backend.send_order(@useCase.send_order(),@gui.get_form_data()))
-
+    
+    After(@useCase, 'update_co', (id) =>  @gui.update_co(id,@useCase.get_co(id)))
+    After(@gui, 'cart_add_new', (id) =>  @useCase.checkIfEmpty())
+    After(@useCase, 'notEmptyCart', => @gui.hideEmptyCart())
+    After(@useCase, 'EmptyCart', => @gui.showEmptyCart())
+    After(@useCase, 'remove_co', => @useCase.checkIfEmpty())
     After(@useCase, 'new_cart_object', => @storage.set('cart', @useCase.cart))
     After(@useCase, 'new_cart_object', => @gui.counter_update(@useCase.cart))
     After(@useCase, 'new_cart_object', => @gui.addNewCartObject(@useCase.cart.last()))
@@ -395,7 +419,6 @@ class WebGlue
     #LogAll(@useCase)
     #LogAll(@gui)
 
-
 #END WEB GLUE
 
 class SPA
@@ -408,7 +431,7 @@ class SPA
     glue = new WebGlue(@useCase, @gui, @localStorage, @backend)
     callback = (response) => 
       @localStorage.set("things", response)
-      useCase.showAll()
+      @useCase.showAll()
     $.get '/spa/things/', {}, callback, 'json'
     $("#alert").ajaxError( (event, request, settings) =>
       $(this).append("<li>Error requesting page " + settings.url + "</li>");
@@ -421,3 +444,4 @@ $ ->
  # dropable()
 
 window.SPA= SPA
+window.LocalStorage = LocalStorage
