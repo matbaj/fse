@@ -18,10 +18,11 @@
 @page_detail_hidden = 0
 
 class Backend
-  send_order: (data) ->
+  send_order: (data,form_data) ->
     console.log("Sending data to backend")
-    console.log(data)
-    $.post("/spa/send_order",  data);
+    post_data = {t:data, first:form_data['first'], last:form_data['last']}
+    console.log(post_data)
+    $.post("/spa/send_order", post_data );
 
 
 
@@ -150,12 +151,10 @@ class UseCase
     @cart.push(cart_object)
 
   send_order: () =>
-    first = $("#order_first_name").val()
-    last = $("#order_last_name").val()
     things_array = []
     for c in @cart
       things_array.push([c.thing.id,c.quantity])
-    data = { t:things_array, first: first, last: last }
+    things_array 
 
 
 
@@ -228,7 +227,10 @@ class WebGui
     $(".detail_content").html(html)
     $(".close_btn").click( => @page_detail_hide())
 
-
+  get_form_data: () ->
+    first = $("#order_first_name").val()
+    last = $("#order_last_name").val()
+    {first: first, last: last }
     
   finalizeOrder: () ->
 
@@ -361,7 +363,7 @@ class WebGlue
     Before(@gui, 'quantityChange', (id) => @useCase.update_co(id))
     
     Before(@gui, 'finalizeOrder', => @gui.prepareOrderDetails(@useCase.cart))
-    Before(@gui, 'finalizePayment', => @backend.send_order(@useCase.send_order()))
+    Before(@gui, 'finalizePayment', => @backend.send_order(@useCase.send_order(),@gui.get_form_data()))
 
     After(@useCase, 'new_cart_object', => @storage.set('cart', @useCase.cart))
     After(@useCase, 'new_cart_object', => @gui.counter_update(@useCase.cart))
@@ -399,7 +401,7 @@ class WebGlue
 class SPA
   constructor: ->
     @useCase = new UseCase()
-    window.useCase = @useCase
+    window.useCase = UseCase
     @gui = new WebGui()
     @backend = new Backend()
     @localStorage = new LocalStorage("spa")

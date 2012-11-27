@@ -30,13 +30,36 @@ describe "Getting started", ->
 describe "Testing UseCase", ->
     beforeEach ->
       @app = new window.SPA()
-      useCase.things = @app.localStorage.getThings()
+      @useCase = new  window.useCase()
+      @useCase.setInitialThings(@app.localStorage.getThings())
+
+    it 'Should give thing object', ->
+      id = 177
+      t =  undefined
+      for thing in @useCase.things
+        if "#{thing.id}" == "#{id}"
+          t=thing      
+      @useCase.get_thing(177) == t
+
+    it 'Should add thing to cart', ->
+      length= @useCase.cart.length
+      @useCase.new_cart_object(177)
+      expect(@useCase.cart.length).toBe(length+1)
 
 
-#   it 'Should add new object to cart', ->
-#     useCase.new_cart_object(177)
+    it 'Should remove thing to cart', ->
+      length= @useCase.cart.length
+      @useCase.new_cart_object(177)
+      expect(@useCase.cart.length).toBe(length+1)
+      @useCase.remove_co(@useCase.cart[0].id)
+      expect(@useCase.cart.length).toBe(length)
       
 
+    it 'Should return array on send_order', ->
+      length= @useCase.cart.length
+      @useCase.new_cart_object(177)
+      expect(@useCase.cart.length).toBe(length+1)
+      expect(@useCase.send_order() instanceof Array).toBeTruthy()
 
 describe "Testing Live application (Testing Cart)", ->
   beforeEach ->
