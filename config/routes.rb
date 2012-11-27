@@ -16,7 +16,5 @@ Fse::Application.routes.draw do
   match '/spa/:action', :controller => 'spa'
   match '/spa', :controller => 'spa', :action => "index"
 
-  match ':action(/:id)', :controller => 'shop'
 
-  match ':controller(/:action(/:id))(.:format)'
 end

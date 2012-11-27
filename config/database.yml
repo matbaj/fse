@@ -41,10 +41,10 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: fse_test
+  database: railsdb
   pool: 5
-  username: fse
-  password:
+  username: rails
+  password: 
 
 production:
   adapter: postgresql

@@ -1,0 +1,111 @@
+<script id="offer_box_tpl" type="text/x-handlebars-template">
+	<div class="offer_box" id="offer_{{id}}">
+	<b>{{name}}</b><br><br>
+	<span class="price">{{cost}} zł</span><br><input  class="button detail_btn" type="button" value='Detale'>
+	<input  class="button to_cart_btn" type="button" value='Do koszyka'>
+	</div>
+
+
+
+</script>
+<script id="error_tpl" type="text/x-handlebars-template">
+<div id="error_img"><img src="http://24.media.tumblr.com/tumblr_m1medsAT0r1rpzcaeo1_400.gif"></div>
+
+</script>
+
+<script id="detail_tpl" type="text/x-handlebars-template">
+
+<div class="content_title">{{name}}	<input  class="button close_btn" type="button" value='Zamknij'>
+ </div>
+
+<div class="content_about">{{about}}</div>
+<div class="content_price">Cena:{{cost}} PLN</div>
+<div id="jake">
+<div id="cloud">Zaufaj mi ziomuś<br> to jest mega okazja<div id="cloud_triangle_l"></div></div>
+<img id="jake_img" src="http://3.bp.blogspot.com/_inTbHVA4clo/TIPX1HflkII/AAAAAAAAACU/wRg07kAv-ME/s1600/adventure-time-with-finn-and-jake-john-dimaggio-2.jpg">
+</div>
+
+</script>
+<script id="cart_object_tpl" type="text/x-handlebars-template">
+
+      <div class="cart_object thing" id="co_{{id}}" >
+        <div class="price">{{thing.cost}}PLN</div>
+        <div class="title">{{thing.name}}</div>
+        <div class="price_sum">{{sum}}PLN</div>
+        <div class="count">Sztuk:<input class="quantity" type="number" size="2" value="{{quantity}}"></div>
+        <div class="remove_button">Usuń</div>
+        <br>
+
+    </div>
+</script>
+
+<script id="order_finalize_tpl" type="text/x-handlebars-template">
+
+<div class="content_title">Finalizacja Zamówienia <input class="button close_btn" type="button" value='Anuluj'>
+ </div>
+ <div class="order_table">{{{order_list}}}</div>
+<div class="order_summary">Suma do zapłaty {{sum}} PLN</div>
+Wprowadz dane:<br>
+Imie: <input type="text" id="order_first_name"><br>
+Nazwisko: <input type="text" id="order_last_name"><br>
+<input class="THE_LAST_FINALIZE_BUTTON" type="button" value="zapłać">
+
+
+
+</script>
+<script id="order_finalize_tpl" type="text/x-handlebars-template">
+
+<div class="content_title">Finalizacja Zamówienia <input class="button close_btn" type="button" value='Anuluj'>
+ </div>
+ <div class="order_table">{{{order_list}}}</div>
+<div class="order_summary">Suma do zapłaty {{sum}} PLN</div>
+Wprowadz dane:<br>
+Imie: <input type="text" id="order_first_name"><br>
+Nazwisko: <input type="text" id="order_last_name"><br>
+<input class="THE_LAST_FINALIZE_BUTTON" type="button" value="zapłać">
+
+
+
+</script>
+<script id="done_page_tpl" type="text/x-handlebars-template">
+
+<div class="content_title">Zamówienie zostało złożone</div>
+<iframe width="420" height="315" src="http://www.youtube.com/embed/_nVk25ZvTkU?autoplay=1&rel=0" frameborder="0" allowfullscreen></iframe><br>
+<input class="close_btn" type="button" value="Zamknij komunikat">
+
+
+
+</script>
+
+<script id="order_object_tpl" type="text/x-handlebars-template">
+
+      <div class="order_object "  >
+        <div class="price">Jednostkowo {{thing.cost}}PLN</div>
+        <div class="title">{{thing.name}}</div>
+        <div class="price_sum">razem {{sum}}PLN</div>
+        <div class="count">Sztuk:{{quantity}}</div>
+        <br>
+
+    </div>
+</script>
+
+<div id="detail_page">
+	<div id="frame">
+		<div id="content" class="detail_content">
+				<div class="content_title">Trwa ładowanie strony</div>
+				<img src="http://24.media.tumblr.com/tumblr_m7fygngqW71r0sq8ko1_500.gif">
+		</div>
+	</div>
+</div>
+       <p class="notice"></p>
+        <p class="alert"></p>
+<div id="frame">
+<input id="search" name="q[name_cont]" size="30" type="text" placeholder="Szukaj szybko" />
+<input id="q_about_true" name="q[about_true]" type="checkbox" value="1" />Szukaj w opisach
+<input id="q_more" name="q_more" type="checkbox" value="1" />Wiecej
+<div id="content">
+<div class="content_title">Produkty</div>
+<div id="product_list"></div>
+</div>
+
+</div>

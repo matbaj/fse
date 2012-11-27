@@ -17,6 +17,16 @@
 @cart_new_hidden= 1
 @page_detail_hidden = 0
 
+class Backend
+  send_order: (data) ->
+    console.log("Sending data to backend")
+    console.log(data)
+    $.post("/spa/send_order",  data);
+
+
+
+
+
 #local storage
 class LocalStorage
   constructor: (@namespace) ->
@@ -115,13 +125,13 @@ class UseCase
 
   showAll: =>
 
-  cleancart: () ->
-    for co in @cart
-      @remove_co(co.id)
+
+
   remove_co: (id) =>
     for co in @cart
       if "#{co.id}" == "#{id}"
         @cart.remove(co)
+      
 
   get_thing: (id) =>
     for thing in @things
@@ -140,15 +150,12 @@ class UseCase
     @cart.push(cart_object)
 
   send_order: () =>
-    console.log("Sending data to backend")
     first = $("#order_first_name").val()
     last = $("#order_last_name").val()
     things_array = []
     for c in @cart
       things_array.push([c.thing.id,c.quantity])
     data = { t:things_array, first: first, last: last }
-    console.log(data)
-    $.post("/spa/send_order",  data);
 
 
 
@@ -321,9 +328,13 @@ class WebGui
 
 
   keyPressed: () =>
-  
+
   remove_co: (id) =>
     $("#co_"+id).remove();
+
+  cleancart: (cart) ->
+    for i in [cart.length-1..0] by -1
+      this.remove_co(cart[i].id)
 
 
   #7:00 ... and the last method
@@ -340,7 +351,7 @@ class WebGui
 
 #WEB GLUE http://25.media.tumblr.com/tumblr_m1mk6ng8aC1r2r396o1_500.jpg
 class WebGlue
-  constructor: (@useCase, @gui, @storage)->
+  constructor: (@useCase, @gui, @storage, @backend)->
     AutoBind(@gui, @useCase)
     After(@gui, 'keyPressed',  => @gui.setfilter(@useCase.things))
     Before(@useCase, 'showAll',  => @useCase.setInitialThings(@storage.getThings()))
@@ -348,9 +359,9 @@ class WebGlue
     Before(@gui, 'cart_add_new', (id) =>  @useCase.new_cart_object(id))
     Before(@gui, 'showDetail', (id) => @gui.set_detail_content(@useCase.get_thing(id)))
     Before(@gui, 'quantityChange', (id) => @useCase.update_co(id))
-    Before(@gui, 'remove_co', (id) => @useCase.remove_co(id))
+    
     Before(@gui, 'finalizeOrder', => @gui.prepareOrderDetails(@useCase.cart))
-    Before(@gui, 'finalizePayment', => @useCase.send_order())
+    Before(@gui, 'finalizePayment', => @backend.send_order(@useCase.send_order()))
 
     After(@useCase, 'new_cart_object', => @storage.set('cart', @useCase.cart))
     After(@useCase, 'new_cart_object', => @gui.counter_update(@useCase.cart))
@@ -367,14 +378,16 @@ class WebGlue
     After(@gui, 'showDetail', (id) => @gui.page_detail_show())
     After(@useCase, 'update_co', => @storage.set('cart', @useCase.cart))
     After(@useCase, 'update_co', => @gui.sum_cart(@useCase.cart))
+    After(@gui, 'remove_co', (id) => @useCase.remove_co(id))
     After(@useCase, 'remove_co', => @storage.set('cart', @useCase.cart))
     After(@useCase, 'remove_co', => @gui.counter_update(@useCase.cart))
     After(@useCase, 'remove_co', => @gui.sum_cart(@useCase.cart))
     After(@gui, 'finalizeOrder', => @gui.page_detail_show())
     After(@useCase, 'finalizePayment', => @gui.page_detail_hide())
-    After(@useCase, 'send_order', =>@gui.preparefinishpage())
-    After(@useCase, 'send_order', =>@useCase.cleancart())
+    After(@backend, 'send_order', =>@gui.preparefinishpage())
+    After(@backend, 'send_order', =>@gui.cleancart(@useCase.cart))
     After(@gui, 'preparefinishpage', =>@gui.page_detail_show())
+    
 
 
     #LogAll(@useCase)
@@ -385,13 +398,14 @@ class WebGlue
 
 class SPA
   constructor: ->
-    useCase = new UseCase()
-    window.useCase = useCase
-    gui = new WebGui()
-    localStorage = new LocalStorage("spa")
-    glue = new WebGlue(useCase, gui, localStorage)
+    @useCase = new UseCase()
+    window.useCase = @useCase
+    @gui = new WebGui()
+    @backend = new Backend()
+    @localStorage = new LocalStorage("spa")
+    glue = new WebGlue(@useCase, @gui, @localStorage, @backend)
     callback = (response) => 
-      localStorage.set("things", response)
+      @localStorage.set("things", response)
       useCase.showAll()
     $.get '/spa/things/', {}, callback, 'json'
     $("#alert").ajaxError( (event, request, settings) =>
@@ -403,3 +417,5 @@ class SPA
 $ ->
   @app = new SPA() # http://25.media.tumblr.com/tumblr_m1mky18yLL1qbl3n1o1_500.gif
  # dropable()
+
+window.SPA= SPA
